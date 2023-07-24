@@ -1,0 +1,46 @@
+import random
+
+def get_card():
+    card = [4, 0, 0, 0, 0, 0]
+    for i in range(9):
+        card.append(random.randrange(9))
+    lyn_card = [(i[1] * 2 if i[1] * 2 < 10 else i[1] * 2 - 9) if i[0] % 2 == 0 else i[1] for i in enumerate(card)]
+    control_digit = str(0 if sum(lyn_card) % 10 == 0 else 10 - (sum(lyn_card) % 10))
+    return ''.join(list(map(str, card)) + [control_digit])
+
+def get_pin():
+    return str(random.randrange(1000, 9999))
+
+
+users = {}
+user_option = input('1. Create an account\n2. Log into account\n0. Exit\n')
+while user_option != '0':
+    flag = 1
+    if user_option == '1':
+        users[0] = [get_card(), get_pin(), 0]
+        print(f'Your card has been created\nYour card number:\n{users[0][0]}\nYour card PIN:\n{users[0][1]}\n')
+        users[users[0][0]] = users[0][1]
+        del users[0]
+        print(users)
+    elif user_option == '2':
+        opt1 = input('Enter your card number:\n')
+        opt2 = input('Enter your PIN:\n')
+        if users.get(opt1) == None or users.get(opt1) != opt2:
+            print('Wrong card number or PIN!\n')
+        else:
+            opt3 = input('\nYou have successfully logged in!\n\n1. Balance\n2. Log out\n0. Exit\n')
+            if opt3 == '0':
+                flag = 0
+            else:
+                while opt3 != '0':
+                    if opt3 == '1':
+                        print('Balance: 0\n')
+                        opt3 = input('\n1. Balance\n2. Log out\n0. Exit\n')
+                    elif opt3 == '2':
+                        print('You have successfully logged out!')
+                        break
+    if flag != 0:
+        user_option = input('1. Create an account\n2. Log into account\n0. Exit\n')
+    else:
+        break
+print('Bye!')
